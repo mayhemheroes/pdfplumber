@@ -9,7 +9,7 @@ import sys
 
 import fuzz_helpers as fh
 
-with atheris.instrument_imports():
+with atheris.instrument_imports(include=['pdfplumber', 'pdfminer']):
     import pdfplumber
 
 # Exceptions
@@ -37,7 +37,7 @@ def TestOneInput(data):
         return -1
     except Exception as e:
         # Handle all other exceptions that are NOT raised by the program
-        if random() > 0.995:
+        if random() > 0.99:
             raise e
         return -1
 
