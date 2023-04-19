@@ -35,10 +35,10 @@ def TestOneInput(data):
             (page for page in pdf.pages)
     except (PDFSyntaxError, PSException):
         return -1
-    except Exception as e:
+    except Exception:
         # Handle all other exceptions that are NOT raised by the program
         if random() > 0.99:
-            raise e
+            raise
         return -1
 
 def main():
