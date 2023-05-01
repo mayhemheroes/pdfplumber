@@ -6,4 +6,4 @@ testsuite:
 cmds:
   - cmd: /src/mayhem/fuzz_plumber.py
     libfuzzer: true
-    timeout: 8
+    timeout: 6
