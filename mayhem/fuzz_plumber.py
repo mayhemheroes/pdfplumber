@@ -1,11 +1,9 @@
 #! /usr/bin/env python3
 import io
 from contextlib import contextmanager
-from random import random
 
 import atheris
 import sys
-
 
 import fuzz_helpers as fh
 
@@ -16,6 +14,8 @@ with atheris.instrument_imports(include=['pdfplumber', 'pdfminer']):
 from pdfminer.pdfparser import PDFSyntaxError
 from pdfminer.psparser import PSException
 
+
+ctr = 0
 
 @contextmanager
 def nostdout():
@@ -28,18 +28,20 @@ def nostdout():
     sys.stderr = save_stderr
 
 def TestOneInput(data):
+    global ctr
     fdp = fh.EnhancedFuzzedDataProvider(data)
+
+    ctr += 1
     try:
         with fdp.ConsumeMemoryFile(all_data=True, as_bytes=True) as fp, nostdout():
             pdf = pdfplumber.open(fp)
-            (page for page in pdf.pages)
+            [page for page in pdf.pages]
     except (PDFSyntaxError, PSException):
         return -1
     except Exception:
         # Handle all other exceptions that are NOT raised by the program
-        if random() > 0.99:
+        if ctr > 10_000:
             raise
-        return -1
 
 def main():
     atheris.Setup(sys.argv, TestOneInput)
