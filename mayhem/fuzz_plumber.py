@@ -33,14 +33,21 @@ def TestOneInput(data):
 
     ctr += 1
     try:
+        choice = fdp.ConsumeIntInRange(0, 2)
         with fdp.ConsumeMemoryFile(all_data=True, as_bytes=True) as fp, nostdout():
             pdf = pdfplumber.open(fp)
-            [page for page in pdf.pages]
+            if choice == 0:
+                [page for page in pdf.pages]
+            elif choice == 1:
+                if pdf.pages:
+                    pdf.pages[0].extract_table()
+            elif choice == 2:
+                pdfplumber.pages[0].to_image()
     except (PDFSyntaxError, PSException):
         return -1
     except Exception:
         # Handle all other exceptions that are NOT raised by the program
-        if ctr > 10_000:
+        if ctr > 100_000:
             raise
 
 def main():
