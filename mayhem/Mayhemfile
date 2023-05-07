@@ -1,0 +1,9 @@
+project: pdfplumber
+target: fuzz-plumber
+testsuite:
+    - file://mayhem/testsuite
+
+cmds:
+  - cmd: /src/mayhem/fuzz_plumber.py
+    libfuzzer: true
+    timeout: 6
